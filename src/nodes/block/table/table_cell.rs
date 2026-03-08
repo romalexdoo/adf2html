@@ -46,7 +46,7 @@ pub enum Content {
 }
 
 impl TableCell {
-    pub(crate) fn to_html(&self, is_header_cell: bool, issue_or_comment_link: &String) -> String {
+    pub(crate) fn to_html(&self, is_header_cell: bool, issue_or_comment_link: &str) -> String {
         let tag = match is_header_cell {
             false => "td",
             true => "th",
@@ -99,7 +99,7 @@ impl TableCell {
 }
 
 impl Content {
-    pub fn to_html(&self, issue_or_comment_link: &String) -> String {
+    pub fn to_html(&self, issue_or_comment_link: &str) -> String {
         match self {
             Content::Blockquote(blockquote) => blockquote.to_html(issue_or_comment_link),
             Content::BulletList(bullet_list) => bullet_list.to_html(issue_or_comment_link),

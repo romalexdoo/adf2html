@@ -29,7 +29,7 @@ pub enum Content {
 }
 
 impl ListItem {
-    pub fn to_html(&self, issue_or_comment_link: &String) -> String {
+    pub fn to_html(&self, issue_or_comment_link: &str) -> String {
         let mut content = String::new();
 
         for node in &self.content {

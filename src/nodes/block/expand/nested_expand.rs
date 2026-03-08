@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::ToHtml;
 use super::{
-    expand::expand_html_formatting, 
+    expand_html_formatting, 
     super::{
         heading::Heading, 
         media::{media_group::MediaGroup, media_single::MediaSingle},
@@ -34,7 +34,7 @@ pub enum Content {
 }
 
 impl NestedExpand {
-    pub fn to_html(&self, issue_or_comment_link: &String) -> String {
+    pub fn to_html(&self, issue_or_comment_link: &str) -> String {
         let title = self.attributes.title.clone().unwrap_or_default();
         let content = self.content
             .iter()
@@ -46,7 +46,7 @@ impl NestedExpand {
 }
 
 impl Content {
-    pub fn to_html(&self, issue_or_comment_link: &String) -> String {
+    pub fn to_html(&self, issue_or_comment_link: &str) -> String {
         match self {
             Content::Heading(heading) => heading.to_html(issue_or_comment_link),
             Content::MediaGroup(media_group) => media_group.to_html(),

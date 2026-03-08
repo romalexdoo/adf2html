@@ -6,7 +6,7 @@ pub use chrono_tz::*;
 use std::cell::RefCell;
 
 thread_local! {
-    pub(crate) static TIMEZONE: RefCell<Tz> = RefCell::new(UTC);  // Default to UTC
+    pub(crate) static TIMEZONE: RefCell<Tz> = const { RefCell::new(UTC) };  // Default to UTC
 }
 
 pub(crate) trait ToHtml {

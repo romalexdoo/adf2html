@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::ToHtml;
-use super::media::Media;
+use super::Media;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

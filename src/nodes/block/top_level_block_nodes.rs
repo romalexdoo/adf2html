@@ -5,12 +5,12 @@ use super::{
     blockquote::Blockquote, 
     list::{bullet_list::BulletList, ordered_list::OrderedList},
     code_block::CodeBlock, 
-    expand::expand::Expand,
+    expand::Expand,
     heading::Heading, 
     media::{media_group::MediaGroup, media_single::MediaSingle},
     panel::Panel, 
     paragraph::Paragraph, 
-    table::table::Table,
+    table::Table,
 };
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -31,7 +31,7 @@ pub enum TopLevelBlockNode {
 }
 
 impl TopLevelBlockNode {
-    pub fn to_html(&self, issue_or_comment_link: &String) -> String {
+    pub fn to_html(&self, issue_or_comment_link: &str) -> String {
         match self {
             TopLevelBlockNode::Blockquote(blockquote) => blockquote.to_html(issue_or_comment_link),
             TopLevelBlockNode::BulletList(bullet_list) => bullet_list.to_html(issue_or_comment_link),

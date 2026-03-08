@@ -17,7 +17,7 @@ pub struct Attributes {
 }
 
 impl OrderedList {
-    pub fn to_html(&self, issue_or_comment_link: &String) -> String {
+    pub fn to_html(&self, issue_or_comment_link: &str) -> String {
         let html = self.content
             .iter()
             .map(|item| item.to_html(issue_or_comment_link))

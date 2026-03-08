@@ -15,7 +15,7 @@ pub struct Document {
 }
 
 impl Document {
-    pub fn to_html(&self, timezone: Option<chrono_tz::Tz>, issue_or_comment_link: &String) -> String {
+    pub fn to_html(&self, timezone: Option<chrono_tz::Tz>, issue_or_comment_link: &str) -> String {
         if let Some(new_tz) = timezone {
             TIMEZONE.with(|tz| {
                 *tz.borrow_mut() = new_tz;
@@ -31,7 +31,7 @@ impl Document {
         html
     }
 
-    pub fn replace_media_urls(&mut self, api_domain_name: &String, html_rendered: &String) {
+    pub fn replace_media_urls(&mut self, api_domain_name: &str, html_rendered: &str) {
         let regex = Regex::new(r#"/rest/api/3/attachment/content/\d+"#).unwrap();
 
         let mut urls: Vec<String> = regex

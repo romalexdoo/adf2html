@@ -26,7 +26,7 @@ pub enum Content {
 }
 
 impl Blockquote {
-    pub fn to_html(&self, issue_or_comment_link: &String) -> String {
+    pub fn to_html(&self, issue_or_comment_link: &str) -> String {
         let mut content = String::new();
 
         for node in &self.content {
@@ -38,7 +38,7 @@ impl Blockquote {
 }
 
 impl Content {
-    pub fn to_html(&self, issue_or_comment_link: &String) -> String {
+    pub fn to_html(&self, issue_or_comment_link: &str) -> String {
         match self {
             Content::BulletList(bullet_list) => bullet_list.to_html(issue_or_comment_link),
             Content::CodeBlock(code_block) => code_block.to_html(),

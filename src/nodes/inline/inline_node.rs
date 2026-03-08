@@ -24,7 +24,7 @@ pub enum InlineNode {
 }
 
 impl InlineNode {
-    pub fn to_html(&self, issue_or_comment_link: &String) -> String {
+    pub fn to_html(&self, issue_or_comment_link: &str) -> String {
         match self {
             InlineNode::Date(date) => date.to_html(),
             InlineNode::Emoji(emoji) => emoji.to_html(),

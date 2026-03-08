@@ -18,7 +18,7 @@ pub struct Attributes {
 }
 
 impl Heading {
-    pub fn to_html(&self, issue_or_comment_link: &String) -> String {
+    pub fn to_html(&self, issue_or_comment_link: &str) -> String {
         let tag = format!("h{}", self.attributes.level);
         let id = self.attributes.local_id.as_ref().map(|id| format!(" id = {id}")).unwrap_or_default();
 

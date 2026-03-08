@@ -58,12 +58,10 @@ where
         Some("") => Ok(Some(AccessLevel::None)),
         Some(s) => AccessLevel::deserialize(s.into_deserializer())
             .map(Some)
-            .or_else(|_: D::Error| {
-                Err(de::Error::invalid_value(
-                    Unexpected::Str(s),
-                    &"a valid access level string",
-                ))
-            }),
+            .map_err(|_: D::Error| de::Error::invalid_value(
+                Unexpected::Str(s),
+                &"a valid access level string",
+            )),
         None => Ok(None),
     }
 }

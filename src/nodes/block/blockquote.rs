@@ -2,9 +2,11 @@ use serde::{Deserialize, Serialize};
 
 use crate::ToHtml;
 use super::{
+    heading::Heading,
     list::{bullet_list::BulletList, ordered_list::OrderedList},
     code_block::CodeBlock, 
     media::{media_group::MediaGroup, media_single::MediaSingle},
+    panel::Panel,
     paragraph::Paragraph, 
 };
 
@@ -19,9 +21,11 @@ pub struct Blockquote {
 pub enum Content {
     BulletList(BulletList),
     CodeBlock(CodeBlock),
+    Heading(Heading),
     MediaGroup(MediaGroup),
     MediaSingle(MediaSingle),
     OrderedList(OrderedList),
+    Panel(Panel),
     Paragraph(Paragraph),
 }
 
@@ -42,9 +46,11 @@ impl Content {
         match self {
             Content::BulletList(bullet_list) => bullet_list.to_html(issue_or_comment_link),
             Content::CodeBlock(code_block) => code_block.to_html(),
+            Content::Heading(heading) => heading.to_html(issue_or_comment_link),
             Content::MediaGroup(media_group) => media_group.to_html(),
             Content::MediaSingle(media_single) => media_single.to_html(),
             Content::OrderedList(ordered_list) => ordered_list.to_html(issue_or_comment_link),
+            Content::Panel(panel) => panel.to_html(issue_or_comment_link),
             Content::Paragraph(paragraph) => paragraph.to_html(issue_or_comment_link),
         }
     }
@@ -63,9 +69,11 @@ impl Content {
         match self {
             Content::BulletList(bullet_list) => bullet_list.replace_media_urls(urls),
             Content::CodeBlock(_code_block) => (),
+            Content::Heading(_heading) => (),
             Content::MediaGroup(media_group) => media_group.replace_media_urls(urls),
             Content::MediaSingle(media_single) => media_single.replace_media_urls(urls),
             Content::OrderedList(ordered_list) => ordered_list.replace_media_urls(urls),
+            Content::Panel(panel) => panel.replace_media_urls(urls),
             Content::Paragraph(_paragraph) => (),
         }
     }

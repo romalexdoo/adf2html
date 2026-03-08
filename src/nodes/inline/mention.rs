@@ -43,8 +43,12 @@ pub enum UserType {
 
 impl ToHtml for Mention {
     fn to_html(&self) -> String {
-        let mention_string = self.attributes.text.clone().unwrap_or_default();
-        format!(r#"<span style = "padding: 4px;">{mention_string}</span>"#)
+        use html_escape::encode_text;
+        let mention_string = self.attributes.text.as_deref().unwrap_or_default();
+        if mention_string.is_empty() {
+            return String::new();
+        }
+        format!(r#"<span style="padding: 2px 4px; background-color: #DEEBFF; border-radius: 3px;">{}</span>"#, encode_text(mention_string))
     }
 }
 

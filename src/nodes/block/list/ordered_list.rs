@@ -23,7 +23,14 @@ impl OrderedList {
             .map(|item| item.to_html(issue_or_comment_link))
             .collect::<String>();
 
-        format!(r#"<div style = "padding: 4px;"><ol>{html}</ol></div>"#)
+        let start = self.attributes
+            .as_ref()
+            .and_then(|a| a.order)
+            .filter(|&o| o != 1)
+            .map(|o| format!(r#" start="{o}""#))
+            .unwrap_or_default();
+
+        format!(r#"<div style="padding: 4px;"><ol{start}>{html}</ol></div>"#)
     }
 }
 

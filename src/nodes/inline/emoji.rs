@@ -1,3 +1,4 @@
+use html_escape::encode_text;
 use serde::{Deserialize, Serialize};
 
 use crate::ToHtml;
@@ -19,7 +20,11 @@ pub struct Attributes {
 
 impl ToHtml for Emoji {
     fn to_html(&self) -> String {
-        let emoji_string = self.attributes.text.clone().unwrap_or(self.attributes.short_name.clone());
-        format!(r#"<span style = "padding: 4px;">{emoji_string}</span>"#)
+        // Prefer the Unicode text field; skip rendering if only a raw short-name is available
+        if let Some(text) = &self.attributes.text {
+            encode_text(text).into_owned()
+        } else {
+            String::new()
+        }
     }
 }

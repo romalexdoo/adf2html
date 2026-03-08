@@ -6,7 +6,7 @@ A Rust library for converting [Atlassian Document Format (ADF)](https://develope
 
 Supports the following ADF node types:
 
-**Block nodes:** `blockquote`, `bulletList`, `codeBlock`, `expand`, `heading`, `mediaGroup`, `mediaSingle`, `orderedList`, `panel`, `paragraph`, `rule`, `table`
+**Block nodes:** `blockquote`, `bulletList`, `codeBlock`, `decisionList`, `expand`, `heading`, `mediaGroup`, `mediaSingle`, `orderedList`, `panel`, `paragraph`, `rule`, `table`, `taskList`
 
 **Inline nodes:** `date`, `emoji`, `hardBreak`, `inlineCard`, `mention`, `status`, `text`
 

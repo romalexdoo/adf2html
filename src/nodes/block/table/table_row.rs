@@ -35,6 +35,20 @@ impl TableRow {
         html
     }
 
+    pub(crate) fn col_widths(&self) -> Vec<u32> {
+        let mut widths = Vec::new();
+        for cell in &self.content {
+            let cw = match cell {
+                Content::TableHeader(c) => c.col_widths(),
+                Content::TableCell(c) => c.col_widths(),
+            };
+            if let Some(w) = cw {
+                widths.extend_from_slice(w);
+            }
+        }
+        widths
+    }
+
     pub(crate) fn replace_media_urls(&mut self, urls: &mut Vec<String>) {
         for content in self.content.iter_mut() {
             match content {

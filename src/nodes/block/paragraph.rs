@@ -18,13 +18,16 @@ pub struct Attributes {
 
 impl Paragraph {
     pub fn to_html(&self, issue_or_comment_link: &str) -> String {
-        let mut html = String::from("<p>");
-
-        if let Some(attributes) = &self.attributes
+        use html_escape::encode_quoted_attribute;
+        let open_tag = if let Some(attributes) = &self.attributes
             && let Some(local_id) = &attributes.local_id 
         {
-            html = format!("<p id = {local_id}>");
-        }
+            format!(r#"<p id="{}">"#, encode_quoted_attribute(local_id))
+        } else {
+            String::from("<p>")
+        };
+
+        let mut html = open_tag;
 
         if let Some(content) = &self.content {
             for inline_node in content {

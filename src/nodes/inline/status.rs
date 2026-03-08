@@ -30,7 +30,11 @@ pub enum Color {
 
 impl ToHtml for Status {
     fn to_html(&self) -> String {
-        let local_id = self.attributes.local_id.as_ref().map(|id| format!(" id = {id}")).unwrap_or_default();
+        use html_escape::{encode_quoted_attribute, encode_text};
+        let local_id = self.attributes.local_id
+            .as_ref()
+            .map(|id| format!(r#" id="{}""#, encode_quoted_attribute(id)))
+            .unwrap_or_default();
         
         let color = match self.attributes.color {
             Color::Neutral => "background-color: rgba(9, 30, 66, 0.08)",
@@ -41,6 +45,9 @@ impl ToHtml for Status {
             Color::Yellow => "color: rgb(151, 79, 12); background-color: #FFFAE6",
         };
 
-        format!(r#"<span {local_id} style = "{color}; padding-left: 4px; padding-right: 4px; font-weight: bold">{}</span>"#, self.attributes.text.to_uppercase())
+        format!(
+            r#"<span{local_id} style="{color}; padding-left: 4px; padding-right: 4px; font-weight: bold">{}</span>"#,
+            encode_text(&self.attributes.text.to_uppercase())
+        )
     }
 }

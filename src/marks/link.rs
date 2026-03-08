@@ -19,14 +19,15 @@ pub struct Attributes {
 
 impl Link {
     pub(crate) fn html_a_tag_attributes(&self) -> String {
-        let mut html = format!(r#"href="{}""#, self.attributes.href);
+        use html_escape::encode_quoted_attribute;
+        let mut html = format!(r#"href="{}""#, encode_quoted_attribute(&self.attributes.href));
 
         if let Some(id) = &self.attributes.id {
-            html.push_str(&format!(r#" id="{id}""#));
+            html.push_str(&format!(r#" id="{}""#, encode_quoted_attribute(id)));
         }
 
         if let Some(title) = &self.attributes.title {
-            html.push_str(&format!(r#" title="{title}""#));
+            html.push_str(&format!(r#" title="{}""#, encode_quoted_attribute(title)));
         }
 
         html

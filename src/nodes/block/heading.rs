@@ -19,8 +19,12 @@ pub struct Attributes {
 
 impl Heading {
     pub fn to_html(&self, issue_or_comment_link: &str) -> String {
+        use html_escape::encode_quoted_attribute;
         let tag = format!("h{}", self.attributes.level);
-        let id = self.attributes.local_id.as_ref().map(|id| format!(" id = {id}")).unwrap_or_default();
+        let id = self.attributes.local_id
+            .as_ref()
+            .map(|id| format!(r#" id="{}""#, encode_quoted_attribute(id)))
+            .unwrap_or_default();
 
         let mut html = String::new();
 
@@ -31,6 +35,6 @@ impl Heading {
                 .collect();
         }
 
-        format!(r#"<{tag}{id} style = "padding: 4px;">{html}</{tag}>"#)
+        format!(r#"<{tag}{id}>{html}</{tag}>"#)
     }
 }

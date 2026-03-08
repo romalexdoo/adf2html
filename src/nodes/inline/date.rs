@@ -36,7 +36,7 @@ impl ToHtml for Date {
                 .format(&fmt)
                 .to_string();
 
-            return format!(r#"<span style = "padding: 4px;">{date_string}</span>"#);
+            return format!(r#"<span style="padding: 4px;">{date_string}</span>"#);
         };
 
         String::new()

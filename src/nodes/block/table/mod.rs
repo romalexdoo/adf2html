@@ -63,6 +63,26 @@ impl Table {
 
         style = format!(r#" style = "{style}""#);
 
+        // Build colgroup from the first row's cell col_width values
+        let colgroup = self.content
+            .first()
+            .map(|first_row| {
+                let widths = first_row.col_widths();
+                if widths.is_empty() {
+                    String::new()
+                } else {
+                    let cols: String = widths.iter().map(|&w| {
+                        if w > 0 {
+                            format!(r#"<col style="width: {w}px;">"#)
+                        } else {
+                            String::from("<col>")
+                        }
+                    }).collect();
+                    format!("<colgroup>{cols}</colgroup>")
+                }
+            })
+            .unwrap_or_default();
+
         let mut content = String::new();
         let mut row_number = match is_number_column_enabled {
             true => Some(0),
@@ -77,7 +97,7 @@ impl Table {
             content.push_str(&row.to_html(row_number, issue_or_comment_link));
         }
         
-        format!("<table{style}>{content}</table>")
+        format!("<table{style}>{colgroup}{content}</table>")
     }
 }
 

@@ -46,49 +46,43 @@ pub enum Content {
 }
 
 impl TableCell {
-    pub(crate) fn to_html(&self, is_header_cell: bool, issue_or_comment_link: &str) -> String {
-        let tag = match is_header_cell {
-            false => "td",
-            true => "th",
-        };
+    pub(crate) fn col_widths(&self) -> Option<&Vec<u32>> {
+        self.attributes.as_ref()?.col_width.as_ref()
+    }
 
+    pub(crate) fn to_html(&self, is_header_cell: bool, issue_or_comment_link: &str) -> String {
+        use html_escape::encode_quoted_attribute;
+        let tag = if is_header_cell { "th" } else { "td" };
+
+        let mut style = String::new();
         let mut tag_attributes = String::new();
-        let mut col_widths = String::new();
 
         if let Some(attributes) = &self.attributes {
             if let Some(background) = &attributes.background {
-                tag_attributes.push_str( &format!(r#" style = "background-color: {background};""#));
+                style.push_str(&format!("background-color: {};", encode_quoted_attribute(background)));
             }
 
             if let Some(colspan) = attributes.colspan {
-                tag_attributes.push_str( &format!(r#" colspan="{colspan}""#));
+                tag_attributes.push_str(&format!(r#" colspan="{colspan}""#));
             }
-            
-            if let Some(col_width) = &attributes.col_width {
-                col_widths.push_str("<colgroup>");
 
-                for width in col_width {
-                    if *width == 0 {
-                        col_widths.push_str(&format!(r#"<col style="width: {width}px;">"#));
-                    } else {
-                        col_widths.push_str(r#"<col style="width: auto;">"#);
-                    }
-                }
-
-                col_widths.push_str("</colgroup>");
-            }
-            
             if let Some(row_span) = attributes.row_span {
-                tag_attributes.push_str( &format!(r#" rowspan="{row_span}""#));
-            }            
+                tag_attributes.push_str(&format!(r#" rowspan="{row_span}""#));
+            }
         }
+
+        let style_attr = if style.is_empty() {
+            String::new()
+        } else {
+            format!(r#" style="{style}""#)
+        };
 
         let content = self.content
             .iter()
             .map(|n| n.to_html(issue_or_comment_link))
             .collect::<String>();
 
-        format!("{col_widths}<{tag}{tag_attributes}>{content}</{tag}>")
+        format!("<{tag}{style_attr}{tag_attributes}>{content}</{tag}>")
     }
 
     pub(crate) fn replace_media_urls(&mut self, urls: &mut Vec<String>) {

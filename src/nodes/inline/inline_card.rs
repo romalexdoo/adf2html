@@ -20,10 +20,12 @@ pub struct Attributes {
 
 impl InlineCard {
     pub fn to_html(&self, issue_or_comment_link: &str) -> String {
-        if let Some(url) = &self.attributes.url {
-            format!(r#"<a style = "padding: 4px;" href = "{0}">{0}</a>"#, url)
-        } else {
-            format!(r#"<a style = "padding: 4px;" href = "{0}">{0}</a>"#, issue_or_comment_link)
-        }
+        use html_escape::{encode_quoted_attribute, encode_text};
+        let url = self.attributes.url.as_deref().unwrap_or(issue_or_comment_link);
+        format!(
+            r#"<a href="{}">{}</a>"#,
+            encode_quoted_attribute(url),
+            encode_text(url)
+        )
     }
 }

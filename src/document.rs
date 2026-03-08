@@ -1,3 +1,5 @@
+use std::sync::OnceLock;
+
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 
@@ -5,6 +7,14 @@ use crate::{
     nodes::block::top_level_block_nodes::TopLevelBlockNode, 
     TIMEZONE
 };
+
+static ATTACHMENT_URL_REGEX: OnceLock<Regex> = OnceLock::new();
+
+fn attachment_url_regex() -> &'static Regex {
+    ATTACHMENT_URL_REGEX.get_or_init(|| {
+        Regex::new(r"/rest/api/3/attachment/content/\d+").unwrap()
+    })
+}
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Document {
@@ -16,11 +26,9 @@ pub struct Document {
 
 impl Document {
     pub fn to_html(&self, timezone: Option<chrono_tz::Tz>, issue_or_comment_link: &str) -> String {
-        if let Some(new_tz) = timezone {
-            TIMEZONE.with(|tz| {
-                *tz.borrow_mut() = new_tz;
-            });
-        }
+        TIMEZONE.with(|tz| {
+            *tz.borrow_mut() = timezone.unwrap_or(chrono_tz::UTC);
+        });
         
         let mut html = String::new();
 
@@ -32,7 +40,7 @@ impl Document {
     }
 
     pub fn replace_media_urls(&mut self, api_domain_name: &str, html_rendered: &str) {
-        let regex = Regex::new(r#"/rest/api/3/attachment/content/\d+"#).unwrap();
+        let regex = attachment_url_regex();
 
         let mut urls: Vec<String> = regex
             .find_iter(html_rendered)
